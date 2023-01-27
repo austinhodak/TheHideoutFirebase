@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "the-hideout-tarkov",
+    "development": "the-hideout-sandbox"
+  },
+  "targets": {},
+  "etags": {}
+}

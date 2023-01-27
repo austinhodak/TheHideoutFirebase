@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth.token.email.matches("firebase@flutterflow.io");
+    }
+
+  	match /loadouts/{loadout} {
+    	allow read, write: if request.auth != null;
+    }
+    match /users/{userId} {
+    	allow read, write: if request.auth != null;
+      
+      match /markers/{markerId} {
+      	allow read, write: if request.auth != null;
+      }
+      
+      match /loadouts/{loadoutId} {
+      	allow read, write: if request.auth != null;
+      }
+      
+      match /offers/{offerId} {
+      	allow read, write: if request.auth != null;
+      }
+    }
+  }
+}

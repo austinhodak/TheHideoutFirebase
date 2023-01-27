@@ -1,0 +1,30 @@
+name: "Branch Deploy"
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+  deployments: write
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3.3.0
+      - uses: github/branch-deploy@v4.0.0
+        id: branch-deploy
+        with:
+          trigger: ".deploy"
+
+      - name: Deploy - Development
+        if: steps.branch-deploy.outputs.environment == 'development'
+        uses: flame-app-studio/firebase-ci-ops@v1.8.3
+        env:
+          FIREBASE_CI_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+          TARGET: ${{ steps.branch-deploy.outputs.environment }}
+          DEPLOY_DATABASE: false
+          DEPLOY_FIRESTORE_RULES: false
+          DEPLOY_STORAGE: false

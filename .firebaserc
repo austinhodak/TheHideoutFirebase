@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "the-hideout-tarkov",
+    "production": "the-hideout-tarkov",
     "development": "the-hideout-sandbox"
   },
   "targets": {},

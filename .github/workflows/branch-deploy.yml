@@ -18,6 +18,7 @@ jobs:
         id: branch-deploy
         with:
           trigger: ".deploy"
+          admins: austinhodak
 
       - name: Deploy - Development
         if: steps.branch-deploy.outputs.environment == 'development'

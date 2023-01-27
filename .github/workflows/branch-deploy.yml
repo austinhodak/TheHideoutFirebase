@@ -17,12 +17,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: npm
+          cache-dependency-path: ./functions/package-lock.json
       - run: npm ci
       - uses: github/branch-deploy@v4.0.0
         id: branch-deploy
         with:
           trigger: ".deploy"
           admins: austinhodak
+          update_branch: disabled
 
       - name: Deploy - Development
         if: steps.branch-deploy.outputs.environment == 'development'

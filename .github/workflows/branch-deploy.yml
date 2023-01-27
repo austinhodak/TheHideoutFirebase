@@ -12,13 +12,14 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./functions
     steps:
       - uses: actions/checkout@v3.3.0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: npm
-          cache-dependency-path: ./functions/package-lock.json
       - run: npm ci
       - uses: github/branch-deploy@v4.0.0
         id: branch-deploy

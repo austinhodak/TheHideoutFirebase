@@ -18,6 +18,12 @@ jobs:
       run:
         working-directory: ./functions
     steps:
+      - uses: github/branch-deploy@v4.0.0
+        id: branch-deploy
+        with:
+          trigger: ".deploy"
+          admins: austinhodak
+          update_branch: disabled
       - uses: actions/checkout@v3.3.0
         with:
           ref: ${{ steps.branch-deploy.outputs.ref }}
@@ -25,13 +31,6 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - uses: github/branch-deploy@v4.0.0
-        id: branch-deploy
-        with:
-          trigger: ".deploy"
-          admins: austinhodak
-          update_branch: disabled
-
       - name: Deploy - Development
         if: steps.branch-deploy.outputs.environment == 'development'
         uses: w9jds/firebase-action@master

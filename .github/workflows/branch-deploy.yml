@@ -28,3 +28,37 @@ jobs:
           DEPLOY_DATABASE: false
           DEPLOY_FIRESTORE_RULES: false
           DEPLOY_STORAGE: false
+          
+      # Post comment on PR with development deploy info
+      - uses: actions/github-script@5d03ada4b0a753e9460b312e61cc4f8fdeacf163 # pin@0.9.0
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' &&
+          steps.branch-deploy.outputs.noop != 'true' &&
+          steps.branch-deploy.outputs.environment == 'development' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `### Function Deployment - Development 🪐
+            > Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\``;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+            
+        # Post comment on PR with production deploy info
+      - uses: actions/github-script@5d03ada4b0a753e9460b312e61cc4f8fdeacf163 # pin@0.9.0
+        if: ${{ steps.branch-deploy.outputs.continue == 'true' &&
+          steps.branch-deploy.outputs.noop != 'true' &&
+          steps.branch-deploy.outputs.environment == 'production' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `### Function Deployment - Production 🌔
+            > Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\``;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

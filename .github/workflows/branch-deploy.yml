@@ -12,13 +12,21 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./functions
     steps:
       - uses: actions/checkout@v3.3.0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
       - uses: github/branch-deploy@v4.0.0
         id: branch-deploy
         with:
           trigger: ".deploy"
           admins: austinhodak
+          update_branch: disabled
 
       - name: Deploy - Development
         if: steps.branch-deploy.outputs.environment == 'development'
